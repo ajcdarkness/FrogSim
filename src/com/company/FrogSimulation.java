@@ -10,12 +10,28 @@ public class FrogSimulation {
     }
     private int hopDistance(){
 
+        int hoppy = (int)(Math.random() *10);
+        return hoppy;
     }
+
     public boolean simulate(){
 
     }
-    public double runSimulations(int num){
+    public double runSimulations(int num, FrogSimulation sim){
+
+        int trues = 0;
+        for (int i=0;i<=num;i++)
+        {
+            if (sim.simulate() = true)
+            {
+                trues++;
+            }
+        }
+        double proportions = trues/num;
+        return proportions;
 
     }
+
+
 
 }
