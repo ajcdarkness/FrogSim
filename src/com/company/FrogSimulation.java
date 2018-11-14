@@ -7,6 +7,8 @@ public class FrogSimulation {
     public FrogSimulation(int dist, int numHops){
         goalDistance = dist;
         maxHops = numHops;
+        int hopCount = 1;
+        int frogPos = 0;
     }
     private int hopDistance(){
 
@@ -15,7 +17,17 @@ public class FrogSimulation {
     }
 
     public boolean simulate(){
-
+        while(frogPos < goalDistance || hopCount <= maxHops || frogPos < 0){
+            frogPos = frogPos + hopDistance();
+            if(frogPos < 0){
+                return false;
+            }else if(frogPos >= goalDistance)
+            { return true;
+            }if(hopCount == maxHops && frogPos < goalDistance){
+                return false;
+            } hopCount++;
+        }
+        return false;
     }
     public double runSimulations(int num, FrogSimulation sim){
 
