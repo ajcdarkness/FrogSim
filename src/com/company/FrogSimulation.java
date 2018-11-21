@@ -6,9 +6,8 @@ public class FrogSimulation
 
     /** Maximum number of hops allowed to reach the goal. */
     private int maxHops;
-
-    int hopCount = 1;
-    int frogPos = 0;
+    public int[] testHops;
+    public int nextHopIndex;
     /** Constructs a FrogSimulation where dist is the distance, in inches, from the starting
      * position to the goal, and numHops is the maximum number of hops allowed to reach the goal.
      * Precondition: dist > 0; numHops > 0
@@ -22,14 +21,15 @@ public class FrogSimulation
 
     /** Returns an integer representing the distance, in inches, to be moved when the frog hops.
      */
-    private int hopDistance()
+    public int hopDistance()
     {
-        int hop = testHops[nextHopIndex];
-        nextHopIndex++;
-        if (nextHopIndex >= testHops.length)
-            nextHopIndex = 0;
-
-        return hop;
+        if(nextHopIndex < testHops.length){
+            int y = testHops[nextHopIndex];
+            nextHopIndex++;
+            return y;
+        }else{
+            return 0;
+        }
     }
 
 /********************** Part (a) *************************/
@@ -40,19 +40,13 @@ public class FrogSimulation
      */
     public boolean simulate()
     {
-        while(frogPos < goalDistance || hopCount <= maxHops || frogPos < 0){
-            frogPos = frogPos + hopDistance();
-            if(frogPos < 0){
-                return false;
-            }else if(frogPos >= goalDistance)
-            {
-                return true;
-            }else if(hopCount == maxHops && frogPos < goalDistance){
-                return false;
-            }
+        int hopCount = 0;
+        int Distance = 0;
+        while(hopCount <= maxHops && Distance >= 0 && Distance <= goalDistance){
+            Distance += hopDistance();
             hopCount++;
         }
-        return false;
+        return (Distance >= goalDistance);
     }
 
 /********************** Part (b) *************************/
@@ -64,7 +58,7 @@ public class FrogSimulation
     public double runSimulations(int num)
     {
         int trues = 0;
-        for (int i=0;i<=num;i++)
+        for (int i=0;i<num;i++)
         {
             if (simulate())
             {
@@ -75,33 +69,4 @@ public class FrogSimulation
         return proportions;
     }
 
-    /********************** Test *************************/
-
-    private int[] testHops;
-    private int nextHopIndex;
-
-    public static void main(String[] args)
-    {
-        int[][] hopSequences =
-                {
-                        {5, 7, -2, 8, 6},
-                        {6, 7, 6, 6},
-                        {6, -6, 31},
-                        {4, 2, -8},
-                        {5, 4, 2, 4, 3}
-                };
-
-        FrogSimulation sim = new FrogSimulation(24, 5);
-
-        for (int i = 0; i < hopSequences.length; i++)
-        {
-            sim.testHops = hopSequences[i];
-            sim.nextHopIndex = 0;
-            System.out.println("Simulation # " + i+1 + ": " + sim.simulate());
-        }
-
-        sim.testHops = hopSequences[0];
-        sim.nextHopIndex = 0;
-        System.out.println(sim.runSimulations(10));
-    }
 }
